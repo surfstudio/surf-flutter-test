@@ -1,0 +1,12 @@
+include: package:surf_lint_rules/analysis_options.yaml
+
+dart_code_metrics:
+  rules:
+    - member-ordering-extended:
+        exclude:
+          - test_screen/**/*
+
+analyzer:
+  exclude:
+    - lib/**/*
+    - integration_test/*.g.dart

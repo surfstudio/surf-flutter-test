@@ -1,0 +1,26 @@
+name: surf_flutter_test
+description: Extensions and useful solutions for integration_test
+version: 0.0.1
+homepage: https://github.com/surfstudio/surf_flutter_test
+
+environment:
+  sdk: ">=2.17.6 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  flutter_gherkin: ^3.0.0-rc.17
+  gherkin: ^3.1.0
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  path: ^1.8.1
+
+dev_dependencies:
+  surf_lint_rules: ^1.5.0
+
+flutter:
