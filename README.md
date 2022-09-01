@@ -23,7 +23,7 @@ integration_test, flutter_test и flutter_gherkin
 ```yaml
 surf_flutter_test:
   git:
-    url: https://github.com/surfstudio/surf_flutter_test
+    url: https://github.com/surfstudio/surf-flutter-test
     ref: main
 ```
 
