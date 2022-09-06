@@ -1,3 +1,5 @@
+// TODO(anyone): сделать все поля статичными.
+// TODO(anyone): ОПЦИОНАЛЬНО - сделать приватный конструктор, пометить аннотацией @immutable
 class TestDelays {
   /// задержки для запроса
   final Duration shortRequestDelay = const Duration(seconds: 5);

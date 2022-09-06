@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:surf_flutter_test/surf_flutter_test.dart';
 
 extension PumpedWidgetTester on WidgetTester {
+  // TODO(anyone): занялся бы везде рефакторигом документации по методам и не только - выглядит не оч.
   /// Функция для того чтобы пампить определенное время, когда нельзя использовать
   /// pumpAndSettle или обычный pump
   Future<void> pumpForDuration(Duration duration) async {
@@ -28,7 +29,8 @@ extension PumpedWidgetTester on WidgetTester {
     var instant = true;
     final times = repeatTimes(timeout ?? TestDelays().defaultPumpTimeout);
     for (var i = 0; i < times; i++) {
-      if (safeEval(() => condition(), false)) {
+      // TODO(anyone): можно так писать без явного вызова.
+      if (safeEval(condition, false)) {
         // добавляем доп задержку если нашли не сразу - скорее всего идет анимация
         if (!instant) await pumpUntilSettled(timeout: TestDelays().interactionDelay);
         return true;
@@ -49,12 +51,15 @@ extension PumpedWidgetTester on WidgetTester {
     bool condition() => finder.evaluate().isNotEmpty;
     final found = await pumpUntilCondition(condition, timeout: timeout);
     if (!found && doThrow) {
+      // TODO(anyone): игнор ж тут не нужен.
       // ignore: only_throw_errors
       throw TestFailure('Target was not found ${finder.description}\n${StackTrace.current}');
     }
     return found;
   }
 
+  // TODO(anyone): стоит описать какое дефолтное время будет выделено на поиск, иначе непонятно.
+  // TODO(anyone): аналогично в других местах.
   /// Функция для pump пока не будет обнаружен любой из списка виджетов
   Future<void> pumpUntilVisibleAny(
     List<Finder> finderList, {

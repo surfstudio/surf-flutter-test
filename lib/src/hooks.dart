@@ -28,6 +28,9 @@ class ConvenienceHook extends Hook {
   }
 
   Future<String> takeScreenshot(World world) async {
+    // TODO(anyone): сделать type check через if (world is ContextualWorld) ....
+    // TODO(anyone): в случае если не он - выкинуть ошибку что "умеем работать ток с ним"
+    // TODO(anyone): либо же чётко описать данное в входном параметре.
     final contextualWorld = world as ContextualWorld;
     // Если тест падает во время анимации, может быть ошибка создания скриншота
     final tester = contextualWorld.appDriver.nativeDriver;

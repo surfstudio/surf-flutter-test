@@ -19,6 +19,9 @@ abstract class BaseTestGestures {
   static const Offset carouselLeftStrong = Offset(600, 0);
 }
 
+// TODO(anyone): вроде помню обсуждали что статичными тут поля не сделать, ибо нужно наследование, верно помню?
+// TODO(anyone): может всё таки есть варик от такого отказаться и использовать общее в статичных
+// TODO(anyone): полях, для непосредственно экрана - аналогично, но тогда теряется переиспользуемость(
 /// Базовый экран с набором основных Finder'ов. На проекте стоит иметь свой базовый экран
 /// наследующийся от этого, а экраны фич должны наследоваться от базового экрана.
 class BaseTestScreen {
@@ -29,8 +32,10 @@ class BaseTestScreen {
       w is NestedScrollView ||
       w is ReorderableListView);
 
+  // TODO(anyone): нужна ли ещё эта строка?
   // (w) => [CustomScrollView, SingleChildScrollView, ListView].contains(w.runtimeType));
 
+  // TODO(anyone): а если RichText используется? с ним не хотим тоже обработать ли?
   /// [Text] с частичным совпадением
   Finder textPartial(String text) =>
       find.byWidgetPredicate((w) => w is Text && (w.data?.contains(text) ?? false));

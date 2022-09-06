@@ -62,6 +62,7 @@ Future<void> writeGherkinReports(
 
   final reports = json.decode(data?['gherkin_reports'].toString() ?? '[]') as List<dynamic>;
   for (var i = 0; i < reports.length; i += 1) {
+    // TODO(anyone): сделать через type check, в случае ошибки - подумать что хотите видеть тогда.
     final reportData = reports.elementAt(i) as List<dynamic>;
 
     await fs.directory(integration_test_driver.testOutputsDirectory).create(recursive: true);
