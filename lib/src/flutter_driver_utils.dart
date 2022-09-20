@@ -2,15 +2,22 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/common.dart';
 import 'package:integration_test/integration_test_driver.dart' as integration_test_driver;
 import 'package:path/path.dart' as path;
 
-/// Функция для задания времени до выключения экрана у андроид устройств
+/// Функция для задания времени до выключения экрана у андроид устройств которые подключены к хосту
+/// Нужна т.к. при длинных прогонах телефон выключает экран, т.к. автотесты не эмулируют действия юзера.
+/// todo https://pub.dev/packages/wakelock - должен позволить не испольовать этот костыль
 Future<void> androidScreenDuration({int duration = 2147483647}) async {
   // Выключаем автоматическое выключение экрана на всех адб девайсах раздельно
-  final deviceString = (await Process.run('adb', ['devices'])).stdout as String;
-  final ids = RegExp(r'\S+(?=\s*device\n+)').allMatches(deviceString).map((e) => e.group(0));
+  final run = await Process.run('adb', ['devices']);
+  final dynamic devices = run.stdout;
+  if (devices is! String) {
+    throw Exception('adb devices returned not String');
+  }
+  final ids = RegExp(r'\S+(?=\s*device\n+)').allMatches(devices).map((e) => e.group(0));
   for (final id in ids.whereType<String>()) {
     final result = await Process.run(
       'adb',
@@ -23,7 +30,9 @@ Future<void> androidScreenDuration({int duration = 2147483647}) async {
 }
 
 /// При падении тестов не создаестся json отчет, поэтому responseDataCallback был вынесен
-/// из условия allTestsPassed
+/// из условия allTestsPassed.
+/// На проекте нужно указывать [timeout] т.к. если время прогона будет больше него - отчета не будет
+/// По умолчанию передается колбек writeGherkinReports
 Future<void> fixedIntegrationDriver({
   Duration timeout = const Duration(minutes: 20),
   integration_test_driver.ResponseDataCallback? responseDataCallback = writeGherkinReports,
@@ -60,10 +69,11 @@ Future<void> writeGherkinReports(
     destinationDirectory: destinationDirectory,
   );
 
-  final reports = json.decode(data?['gherkin_reports'].toString() ?? '[]') as List<dynamic>;
+  final dynamic reports = json.decode(data?['gherkin_reports'].toString() ?? '[]');
+  if (reports is! List) throw Exception('gherkin report is not a List while it should be');
   for (var i = 0; i < reports.length; i += 1) {
-    // TODO(anyone): сделать через type check, в случае ошибки - подумать что хотите видеть тогда.
-    final reportData = reports.elementAt(i) as List<dynamic>;
+    final Object? reportData = reports.elementAt(i);
+    if (reportData is! List) throw TestFailure('For some reason report is not properly working');
 
     await fs.directory(integration_test_driver.testOutputsDirectory).create(recursive: true);
     final File file = fs.file(path.join(

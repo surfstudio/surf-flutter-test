@@ -1,9 +1,8 @@
+// ignore_for_file: avoid_types_on_closure_parameters
 import 'package:flutter_gherkin/flutter_gherkin.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gherkin/gherkin.dart';
 
-// TODO(anyone): стоит на всё это написать хотя бы верхнеуровневую доку с примером что и как использовать
-// TODO(anyone): что в колбэке появился тестер для дальнейшего использования
 GenericFunctionStepDefinition<TWorld> testerWhen<TWorld extends FlutterWidgetTesterWorld>(
   Pattern pattern,
   Future<void> Function(

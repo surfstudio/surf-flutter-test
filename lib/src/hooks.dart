@@ -6,7 +6,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:gherkin/gherkin.dart';
 import 'package:surf_flutter_test/surf_flutter_test.dart';
 
-/// Хук для допольнительного pump перед созданием скриншота
+/// Хук который добавляет стабильности скриншотам при падении за счет pumpUntilSettled
+/// Так же использует RenderElement способ взятия скриншотов, т.к. на ios не работает нативный способ
+/// После сценария сбрасывает debugDefaultTargetPlatformOverride т.к. flutter_test проверяет это
 class ConvenienceHook extends Hook {
   @override
   Future<void> onAfterStep(
@@ -28,16 +30,18 @@ class ConvenienceHook extends Hook {
   }
 
   Future<String> takeScreenshot(World world) async {
-    // TODO(anyone): сделать type check через if (world is ContextualWorld) ....
-    // TODO(anyone): в случае если не он - выкинуть ошибку что "умеем работать ток с ним"
-    // TODO(anyone): либо же чётко описать данное в входном параметре.
-    final contextualWorld = world as ContextualWorld;
+    if (world is! FlutterWidgetTesterWorld) {
+      throw TestFailure('E2E hook works only with FlutterWidgetTesterWorld objects');
+    }
+    final appDriver = world.appDriver;
+    if (appDriver is! WidgetTesterAppDriverAdapter) {
+      throw TestFailure('E2E hook works only with WidgetTesterAppDriverAdapter objects');
+    }
     // Если тест падает во время анимации, может быть ошибка создания скриншота
-    final tester = contextualWorld.appDriver.nativeDriver;
+    final tester = world.appDriver.nativeDriver;
     await tester.pumpUntilSettled(timeout: TestDelays().longInteractionDelay);
     // ошибка MissingPluginException на айос, поэтому делаем скриншот по верстке
-    final bytes = await (contextualWorld.appDriver as WidgetTesterAppDriverAdapter)
-        .takeScreenshotUsingRenderElement();
+    final bytes = await appDriver.takeScreenshotUsingRenderElement();
 
     return base64Encode(bytes);
   }

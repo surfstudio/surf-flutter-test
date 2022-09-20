@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:surf_flutter_test/surf_flutter_test.dart';
 
-final baseTestScreen = BaseTestScreen();
+final testScreen = TestScreen();
 
 void main() {
   final buttonFinder = find.widgetWithText(ElevatedButton, 'Show snackbar');
@@ -10,7 +10,7 @@ void main() {
   final snackFinder = find.widgetWithText(SnackBar, 'Yay! A SnackBar!');
   final snackFinder2 = find.widgetWithText(SnackBar, 'Yay! A SnackBar number two!');
   group('pumps tests', () {
-    testWidgets('check usual pump is not working', (WidgetTester tester) async {
+    testWidgets('check usual pump is not working', (tester) async {
       await tester.pumpWidget(const _App(_SnackPage()));
       await tester.tap(buttonFinder);
       await tester.pump();
@@ -70,39 +70,39 @@ void main() {
     });
   });
   group('actions tests', () {
-    testWidgets('implicit tap', (WidgetTester tester) async {
+    testWidgets('implicit tap', (tester) async {
       await tester.pumpWidget(const _App(_SnackPage()));
       await tester.implicitTap(buttonFinder);
       await tester.pumpUntilVisible(snackFinder);
       expect(snackFinder, findsOneWidget);
     });
-    testWidgets('implicit tap all', (WidgetTester tester) async {
+    testWidgets('implicit tap all', (tester) async {
       await tester.pumpWidget(const _App(_CheckboxPage()));
       final finder = find.byType(Checkbox);
       await tester.implicitTapAll(finder);
       expect(finder, findsNWidgets(2));
     });
-    testWidgets('implicit enter text', (WidgetTester tester) async {
+    testWidgets('implicit enter text', (tester) async {
       await tester.pumpWidget(const _App(_TextFieldPage()));
       final finder = find.byType(TextField);
       await tester.implicitEnterText(finder, 'test');
       expect(tester.widget<TextField>(finder).controller?.text, 'test');
     });
-    testWidgets('implicit scroll', (WidgetTester tester) async {
+    testWidgets('implicit scroll', (tester) async {
       await tester.pumpWidget(const _App(_ScrollPage()));
       final finder = find.text('Text3');
       expect(finder, findsNothing);
       await tester.implicitScrollUntilVisible(finder);
       expect(finder, findsOneWidget);
     });
-    testWidgets('simple drag', (WidgetTester tester) async {
+    testWidgets('simple drag', (tester) async {
       await tester.pumpWidget(const _App(_ScrollPage()));
       final finder = find.text('Text3');
       expect(finder, findsNothing);
       await tester.simpleDragUntilVisible(
         finder,
         find.byType(ListView),
-        BaseTestGestures.scrollDown,
+        TestGestures.scrollDown,
       );
       expect(finder, findsOneWidget);
     });
@@ -187,7 +187,7 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
   @override
   Widget build(BuildContext context) {
     Color getColor(Set<MaterialState> states) {
-      const Set<MaterialState> interactiveStates = <MaterialState>{
+      const interactiveStates = <MaterialState>{
         MaterialState.pressed,
         MaterialState.hovered,
         MaterialState.focused,
@@ -202,7 +202,7 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
       checkColor: Colors.white,
       fillColor: MaterialStateProperty.resolveWith(getColor),
       value: isChecked,
-      onChanged: (bool? value) {
+      onChanged: (value) {
         setState(() {
           isChecked = value!;
         });

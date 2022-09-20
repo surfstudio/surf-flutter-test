@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:surf_flutter_test/surf_flutter_test.dart';
 
-final baseTestScreen = BaseTestScreen();
+final testScreen = TestScreen();
 
 void main() {
   group('finder tests', () {
@@ -23,13 +23,7 @@ void main() {
           ),
         ],
       )));
-      expect(baseTestScreen.scroll, findsNWidgets(3));
-    });
-    testWidgets('finds partial text', (tester) async {
-      await tester.pumpWidget(_boilerplate(
-        const Text('Some_long_text'),
-      ));
-      expect(baseTestScreen.textPartial('text'), findsOneWidget);
+      expect(testScreen.scroll, findsNWidgets(3));
     });
     testWidgets('finds close btn', (tester) async {
       await tester.pumpWidget(_boilerplate(Column(
@@ -38,7 +32,7 @@ void main() {
           Icon(Icons.cancel_rounded),
         ],
       )));
-      expect(baseTestScreen.closeBtn, findsNWidgets(2));
+      expect(testScreen.closeBtn, findsNWidgets(2));
     });
     testWidgets('finds text field by label or hint', (tester) async {
       await tester.pumpWidget(_boilerplate(Column(
@@ -51,14 +45,14 @@ void main() {
           ),
         ],
       )));
-      expect(baseTestScreen.textFieldByLabel('test'), findsNWidgets(2));
-      expect(baseTestScreen.textFieldByLabelPartial('est'), findsNWidgets(2));
+      expect(testScreen.textFieldByLabel('test'), findsNWidgets(2));
+      expect(testScreen.textFieldByLabelPartial('est'), findsNWidgets(2));
     });
     testWidgets('change skip offstage', (tester) async {
       await tester.pumpWidget(_boilerplate(
         const Offstage(child: Text('test')),
       ));
-      final finder = baseTestScreen.textPartial('test');
+      final finder = testScreen.textPartial('test');
       expect(finder, findsNothing);
       expect(finder.changeSkipOffstage(), findsOneWidget);
     });

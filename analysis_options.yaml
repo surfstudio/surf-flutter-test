@@ -4,10 +4,4 @@ dart_code_metrics:
   rules:
     - member-ordering-extended:
         exclude:
-          - lib/src/base_test_screen.dart
-
-linter:
-  rules:
-    avoid_types_on_closure_parameters:
-      exclude:
-        - lib/src/steps/*
+          - lib/src/test_screen.dart

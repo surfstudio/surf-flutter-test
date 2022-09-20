@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// Класс с основными Offset'ами для переиспользования в тестах
 /// Направление скролла = направление списка
 /// Направление свайпа/флика = направление движения пальца
-abstract class BaseTestGestures {
+abstract class TestGestures {
   // скролл вниз
   static const Offset scrollDown = Offset(0, -120);
   static const Offset flickUp = Offset(0, -600);
@@ -19,12 +20,10 @@ abstract class BaseTestGestures {
   static const Offset carouselLeftStrong = Offset(600, 0);
 }
 
-// TODO(anyone): вроде помню обсуждали что статичными тут поля не сделать, ибо нужно наследование, верно помню?
-// TODO(anyone): может всё таки есть варик от такого отказаться и использовать общее в статичных
-// TODO(anyone): полях, для непосредственно экрана - аналогично, но тогда теряется переиспользуемость(
 /// Базовый экран с набором основных Finder'ов. На проекте стоит иметь свой базовый экран
 /// наследующийся от этого, а экраны фич должны наследоваться от базового экрана.
-class BaseTestScreen {
+/// Инстансы экранов должны храниться для удобства в test_screen_library файле
+class TestScreen {
   /// любой скролл с типом из списка
   Finder scroll = find.byWidgetPredicate((w) =>
       w is ScrollView ||
@@ -32,13 +31,12 @@ class BaseTestScreen {
       w is NestedScrollView ||
       w is ReorderableListView);
 
-  // TODO(anyone): нужна ли ещё эта строка?
-  // (w) => [CustomScrollView, SingleChildScrollView, ListView].contains(w.runtimeType));
+  /// [Text] или [RichText] (если выбран параметр [findRichText]) с полным соответствием
+  Finder text(String t, {bool findRichText = false}) => find.text(t, findRichText: findRichText);
 
-  // TODO(anyone): а если RichText используется? с ним не хотим тоже обработать ли?
-  /// [Text] с частичным совпадением
-  Finder textPartial(String text) =>
-      find.byWidgetPredicate((w) => w is Text && (w.data?.contains(text) ?? false));
+  /// [Text] или [RichText] (если выбран параметр [findRichText]) с частичным соответствием
+  Finder textPartial(String t, {bool findRichText = false}) =>
+      find.textContaining(t, findRichText: findRichText);
 
   /// крестик
   Finder closeBtn = find
