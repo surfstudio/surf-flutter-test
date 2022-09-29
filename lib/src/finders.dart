@@ -7,8 +7,8 @@ extension BasicExtendedFinders on Finder {
       _WidgetChangeOffstageFinder(this, skipOffstage: skipOffstage);
 }
 
-/// Finder чтобы можно было на лету поменять свойство skipOffstage.
-/// Нужно т.к. поле skipOffstage является финальным и нужно делать еще один Finder, что неудобно.
+/// Finder-обертка, позволяющий менять skipOffstage свойство у передаваемого finder'а.
+/// Свойство final, поэтому этот Finder хранит в себе оригинальный Finder и применяет его в apply.
 class _WidgetChangeOffstageFinder extends Finder {
   /// Finder который обертываем
   final Finder finder;

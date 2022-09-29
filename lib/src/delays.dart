@@ -1,3 +1,8 @@
+import 'package:flutter/widgets.dart';
+
+/// Задержки используемые в приложении. Объект стоит хранить в библиотеке с страницами.
+/// Можно переопределить для своего проекта, изменив задержки или добавив свои в зависимости от нужд проекта
+@immutable
 class TestDelays {
   /// задержки для запроса
   final Duration shortRequestDelay = const Duration(seconds: 5);

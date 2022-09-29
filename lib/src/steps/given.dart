@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_types_on_closure_parameters
 import 'package:flutter_gherkin/flutter_gherkin.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:gherkin/gherkin.dart';

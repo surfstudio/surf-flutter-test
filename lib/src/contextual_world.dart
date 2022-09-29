@@ -1,14 +1,33 @@
 import 'dart:convert';
 
 import 'package:flutter_gherkin/flutter_gherkin.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+/// От этого класса нужно наследоваться при создании профиля с учетными данными тестовых аккаунтов
+abstract class User {}
 
 /// World который позволяет передавать данные внутри сценария и работать с учетными данными
-class ContextualWorld extends FlutterWidgetTesterWorld {
-  final Map<String, String> profile;
-  final Map<String, Map<String, String>> credentials;
-  final Map<String, dynamic> _scenarioContext = <String, dynamic>{};
+/// В шагах нужно указывать тип пользователя через дженерик
+/// Для задания пользователя в шаге "использую аккаунт" нужно использовать [setUser] с типом аккаунта из шага
+/// Для получения объекта User в шаге нужно использовать get user
+class ContextualWorld<U extends User> extends FlutterWidgetTesterWorld {
+  final Map<String, U> _credentialProfile;
+  final Map<String, Object?> _scenarioContext = <String, Object?>{};
+  final String _userKey = 'current_user_key';
 
-  ContextualWorld({required this.credentials, required this.profile});
+  U get user => getContext<U>(_userKey);
+
+  ContextualWorld(this._credentialProfile);
+
+  void setUser(String userType) {
+    final result = _credentialProfile[userType];
+    if (result is! U) {
+      throw TestFailure(
+        'There is no user $userType in credentials of this context. Credentials are: $_credentialProfile}',
+      );
+    }
+    setContext(_userKey, result);
+  }
 
   @override
   void dispose() {
@@ -17,13 +36,16 @@ class ContextualWorld extends FlutterWidgetTesterWorld {
   }
 
   /// получить данные из контекста
-  T getContext<T>(String key) {
-    return _scenarioContext[key] as T;
+  C getContext<C>(String key) {
+    final result = _scenarioContext[key];
+    if (result is! C) {
+      throw TestFailure("Context doesn't contain value with key $key and value type $C");
+    }
+    return result;
   }
 
   /// сохранить данные в контексте сценария
-  //ignore: avoid_annotating_with_dynamic
-  void setContext(String key, dynamic value) {
+  void setContext(String key, Object? value) {
     _scenarioContext[key] = value;
   }
 

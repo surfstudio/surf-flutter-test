@@ -12,7 +12,7 @@ abstract class ProfileTestParams {
   static const String aboutMe = 'about_me';
 }
 
-class ProfileTestScreen extends BaseTestScreen {
+class ProfileTestScreen extends TestScreen {
   /// поле Surname на экране персональных данных
   Finder get surnameField => textFieldByLabel('Surname');
 

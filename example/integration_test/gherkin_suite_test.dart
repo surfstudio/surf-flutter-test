@@ -10,9 +10,7 @@ import 'step_definitions/profile_step_definitions.dart';
 
 part 'gherkin_suite_test.g.dart';
 
-final fakeCredentials = <String, Map<String, String>>{};
-
-final fakeProfile = <String, String>{};
+final _fakeCredentials = <String, User>{};
 
 @GherkinTestSuite()
 void main() {
@@ -24,8 +22,7 @@ void main() {
       hooks: [
         ConvenienceHook(),
       ],
-      createWorld: (config) =>
-          Future.value(ContextualWorld(credentials: fakeCredentials, profile: fakeProfile)),
+      createWorld: (config) => Future.value(ContextualWorld(_fakeCredentials)),
       reporters: [
         StdoutReporter(MessageLevel.error)
           ..setWriteLineFn(Logger.d)
