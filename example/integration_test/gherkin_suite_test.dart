@@ -10,7 +10,7 @@ import 'step_definitions/profile_step_definitions.dart';
 
 part 'gherkin_suite_test.g.dart';
 
-final _fakeCredentials = <String, User>{};
+final _fakeCredentials = <String, String> {};
 
 @GherkinTestSuite()
 void main() {

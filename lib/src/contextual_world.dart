@@ -3,14 +3,11 @@ import 'dart:convert';
 import 'package:flutter_gherkin/flutter_gherkin.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// От этого класса нужно наследоваться при создании профиля с учетными данными тестовых аккаунтов
-abstract class User {}
-
 /// World который позволяет передавать данные внутри сценария и работать с учетными данными
 /// В шагах нужно указывать тип пользователя через дженерик
 /// Для задания пользователя в шаге "использую аккаунт" нужно использовать [setUser] с типом аккаунта из шага
 /// Для получения объекта User в шаге нужно использовать get user
-class ContextualWorld<U extends User> extends FlutterWidgetTesterWorld {
+class ContextualWorld<U> extends FlutterWidgetTesterWorld {
   final Map<String, U> _credentialProfile;
   final Map<String, Object?> _scenarioContext = <String, Object?>{};
   final String _userKey = 'current_user_key';

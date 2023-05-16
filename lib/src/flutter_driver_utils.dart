@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_driver/flutter_driver.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/common.dart';
 import 'package:integration_test/integration_test_driver.dart' as integration_test_driver;
 import 'package:path/path.dart' as path;
@@ -73,7 +72,7 @@ Future<void> writeGherkinReports(
   if (reports is! List) throw Exception('gherkin report is not a List while it should be');
   for (var i = 0; i < reports.length; i += 1) {
     final Object? reportData = reports.elementAt(i);
-    if (reportData is! List) throw TestFailure('For some reason report is not properly working');
+    if (reportData is! List) throw Exception('For some reason report is not properly working');
 
     await fs.directory(integration_test_driver.testOutputsDirectory).create(recursive: true);
     final File file = fs.file(path.join(
