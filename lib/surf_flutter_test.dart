@@ -2,6 +2,7 @@ library surf_flutter_test;
 
 export 'src/contextual_world.dart';
 export 'src/delays.dart';
+export 'src/extensions.dart';
 export 'src/finders.dart';
 export 'src/hooks.dart';
 export 'src/implicit_actions.dart';
