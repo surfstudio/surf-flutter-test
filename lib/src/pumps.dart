@@ -48,8 +48,9 @@ extension PumpedWidgetTester on WidgetTester {
     for (var i = 0; i < times; i++) {
       if (safeEval(condition, false)) {
         // добавляем доп задержку если нашли не сразу - скорее всего идет анимация
-        if (!instant)
+        if (!instant) {
           await pumpUntilSettled(timeout: TestDelays().interactionDelay);
+        }
         return true;
       }
       await pumpForDuration(TestDelays().minimalInteractionDelay);

@@ -1,4 +1,3 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:surf_flutter_test/surf_flutter_test.dart';
 
 /// Функция для безопасной обработки условий в implicit действиях
@@ -21,5 +20,4 @@ T safeEval<T>(T Function() func, T errorValue) {
 /// виджет тестах нет), то использовать Stopwatch и подобные техники для timeout нельзя.
 int repeatTimes(Duration duration) {
   return (duration.inMicroseconds / TestDelays().minimalInteractionDelay.inMicroseconds).ceil();
-
 }
