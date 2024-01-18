@@ -48,7 +48,9 @@ extension PumpedWidgetTester on WidgetTester {
     for (var i = 0; i < times; i++) {
       if (safeEval(condition, false)) {
         // добавляем доп задержку если нашли не сразу - скорее всего идет анимация
-        if (!instant) await pumpUntilSettled(timeout: TestDelays().interactionDelay);
+        if (!instant) {
+          await pumpUntilSettled(timeout: TestDelays().interactionDelay);
+        }
         return true;
       }
       await pumpForDuration(TestDelays().minimalInteractionDelay);
@@ -78,7 +80,8 @@ extension PumpedWidgetTester on WidgetTester {
     bool condition() => finder.evaluate().isNotEmpty;
     final found = await pumpUntilCondition(condition, timeout: timeout);
     if (!found && doThrow) {
-      throw TestFailure('Target was not found ${finder.description}\n${StackTrace.current}');
+      throw TestFailure(
+          'Target was not found ${finder.description}\n${StackTrace.current}');
     }
     return found;
   }
@@ -101,11 +104,13 @@ extension PumpedWidgetTester on WidgetTester {
     List<Finder> finderList, {
     Duration? timeout,
   }) async {
-    bool condition() => finderList.any((target) => target.evaluate().isNotEmpty);
+    bool condition() =>
+        finderList.any((target) => target.evaluate().isNotEmpty);
     final found = await pumpUntilCondition(condition, timeout: timeout);
     if (!found) {
       //ignore: only_throw_errors
-      throw TestFailure('None of targets were found ${finderList.map((e) => e.description)}'
+      throw TestFailure(
+          'None of targets were found ${finderList.map((e) => e.description)}'
           '\n${StackTrace.current}');
     }
   }
@@ -128,7 +133,8 @@ extension PumpedWidgetTester on WidgetTester {
     bool condition() => finder.evaluate().isEmpty;
     final found = await pumpUntilCondition(condition, timeout: timeout);
     if (!found && doThrow) {
-      throw TestFailure('Target did not disappear ${finder.description}\n${StackTrace.current}');
+      throw TestFailure(
+          'Target did not disappear ${finder.description}\n${StackTrace.current}');
     }
     return found;
   }
@@ -143,7 +149,8 @@ extension PumpedWidgetTester on WidgetTester {
     bool condition() => finderList.any((target) => target.evaluate().isEmpty);
     final found = await pumpUntilCondition(condition, timeout: timeout);
     if (!found) {
-      throw TestFailure('None of targets did disappear ${finderList.map((e) => e.description)}'
+      throw TestFailure(
+          'None of targets did disappear ${finderList.map((e) => e.description)}'
           '\n${StackTrace.current}');
     }
   }
@@ -163,6 +170,21 @@ extension PumpedWidgetTester on WidgetTester {
     if (!found) {
       throw TestFailure(
         'There were not $amount targets ${finder.description}\n${StackTrace.current}',
+      );
+    }
+  }
+
+  /// Метод для ожидания пока на экране будет не менее [amount] виджетов [finder].
+  Future<void> pumpUntilVisibleAtLeastNWidgets(
+    Finder finder,
+    int amount,
+    Duration? timeout,
+  ) async {
+    bool condition() => finder.evaluate().length > amount;
+    final found = await pumpUntilCondition(condition, timeout: timeout);
+    if (!found) {
+      throw TestFailure(
+        'There were less than $amount targets ${finder.description}\n${StackTrace.current}',
       );
     }
   }
