@@ -177,10 +177,10 @@ extension PumpedWidgetTester on WidgetTester {
   /// Метод для ожидания пока на экране будет не менее [amount] виджетов [finder].
   Future<void> pumpUntilVisibleAtLeastNWidgets(
     Finder finder,
-    int amount,
+    int amount, {
     Duration? timeout,
-  ) async {
-    bool condition() => finder.evaluate().length > amount;
+  }) async {
+    bool condition() => finder.evaluate().length >= amount;
     final found = await pumpUntilCondition(condition, timeout: timeout);
     if (!found) {
       throw TestFailure(
